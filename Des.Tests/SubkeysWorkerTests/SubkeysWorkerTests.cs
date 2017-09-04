@@ -66,5 +66,42 @@ namespace Des.Tests.SubkeysWorkerTests
                 Assert.Equal(response.ElementAt(i).Key, expectedResult.ElementAt(i).Key);
             }
         }
+
+        [Fact]
+        public void TestETble()
+        {
+            // Arrange
+            var r = "11110000101010101111000010101010";
+
+            // Act
+            var response = PermutationHelper.PermuteKey(r, Consts.Consts.EBitSelection, 48);
+
+            // Assert
+            Assert.Equal("011110100001010101010101011110100001010101010101", response);
+        }
+
+        [Fact]
+        public void TestXorString()
+        {
+            // Arrange
+            var k = "000110110000001011101111111111000111000001110010";
+            var er = "011110100001010101010101011110100001010101010101";
+
+            // Act
+            var response = er.XorByKey(k);
+
+            // Assert
+            Assert.Equal("011000010001011110111010100001100110010100100111", response);
+        }
+
+        [Fact]
+        public void Encode()
+        {
+            // Arrange
+            var ew = new EncodeWorker();
+
+            // Act
+            ew.EncodeValue("ala ma kota i dwa psy", "133457799BBCDFF1");
+        }
     }
 }
