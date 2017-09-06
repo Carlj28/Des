@@ -8,6 +8,18 @@ namespace Des.Validators
 {
     public static class Ensure
     {
+        public static void ArgumentNotNull(object argument, string argumentName)
+        {
+            if(argument == null)
+                throw new ArgumentException($"{argumentName} was null!");
+        }
+
+        public static void ArgumentNotNull(string argument, string argumentName)
+        {
+            if (String.IsNullOrEmpty(argument))
+                throw new ArgumentException($"{argumentName} was null!");
+        }
+
         public static void ValidateDesKey(string hexHey)
         {
             if(hexHey.HexToBinary().Length != 64)

@@ -5,6 +5,8 @@ namespace Des.Extensions
 {
     public static class IntegerExtensions
     {
+        public static string ConvertToBinary(this int value) => Convert.ToString(value, 2);
+
         public static string ConvertToBinary(this int value, int stringLenth)
         {
             var binary = Convert.ToString(value, 2);

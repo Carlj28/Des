@@ -68,19 +68,6 @@ namespace Des.Tests.SubkeysWorkerTests
         }
 
         [Fact]
-        public void TestETble()
-        {
-            // Arrange
-            var r = "11110000101010101111000010101010";
-
-            // Act
-            var response = PermutationHelper.PermuteKey(r, Consts.Consts.EBitSelection, 48);
-
-            // Assert
-            Assert.Equal("011110100001010101010101011110100001010101010101", response);
-        }
-
-        [Fact]
         public void TestXorString()
         {
             // Arrange
@@ -92,16 +79,6 @@ namespace Des.Tests.SubkeysWorkerTests
 
             // Assert
             Assert.Equal("011000010001011110111010100001100110010100100111", response);
-        }
-
-        [Fact]
-        public void Encode()
-        {
-            // Arrange
-            var ew = new EncodeWorker();
-
-            // Act
-            ew.EncodeValue("ala ma kota i dwa psy", "133457799BBCDFF1");
         }
     }
 }

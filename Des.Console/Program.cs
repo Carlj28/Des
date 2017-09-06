@@ -11,8 +11,7 @@ namespace Des.Console
     {
         static void Main(string[] args)
         {
-            var x = new SubkeysWorker();
-            x.GenerateSubkeys("133457799BBCDFF1");
+            System.Console.ReadKey();
         }
     }
 }

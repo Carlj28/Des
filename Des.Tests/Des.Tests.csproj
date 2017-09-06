@@ -61,6 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppendMessageTests\AppendMessageTests.cs" />
+    <Compile Include="EncodeWorkerTests\EncodeWorkerTests.cs" />
+    <Compile Include="ExtensionsTest\BytesExtensionTests.cs" />
+    <Compile Include="KeyGeneratorTests\KeyGeneratorTests.cs" />
+    <Compile Include="PermutationTests\PermutationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubkeysWorkerTests\SubkeysWorkerTests.cs" />
   </ItemGroup>
