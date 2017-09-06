@@ -54,24 +54,20 @@ namespace Des.Extensions
             return result.ToString();
         }
 
-        /// <summary>
-        /// Converts binary to string
-        /// </summary>
-        /// <param name="binary"></param>
-        /// <returns></returns>
-        public static string BinaryToString(this string binary)
+        public static string StringToHex(this string value)
         {
-            //TODO: shorten
-            var list = new List<byte>();
+            var charValues = value.ToCharArray();
+            return charValues.Select(Convert.ToInt32).Aggregate("", (current, val) => current + String.Format("{0:X}", val));
+        }
 
-            for (var i = 0; i < binary.Length; i += 8)
+        public static string HexToString(this string value)
+        {
+            var raw = new byte[value.Length / 2];
+            for (var i = 0; i < raw.Length; i++)
             {
-                String t = binary.Substring(i, 8);
-
-                list.Add(Convert.ToByte(t, 2));
+                raw[i] = Convert.ToByte(value.Substring(i * 2, 2), 16);
             }
-
-            return Encoding.ASCII.GetString(list.ToArray());
+            return Encoding.UTF8.GetString(raw);
         }
 
         /// <summary>

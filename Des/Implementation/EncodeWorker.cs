@@ -27,10 +27,10 @@ namespace Des.Implementation
 
                 var reversedBlock = ReverseLastBlock(blocks.Last());
 
-                output += Convert.ToInt64(reversedBlock, 2).ToString("X");
+                output += reversedBlock.BinaryStringToHexString();
             }
 
-            return "";
+            return output;
         }
 
         //TODO: string builder
@@ -81,7 +81,6 @@ namespace Des.Implementation
                 var rowIndex = rowBits.BytesToInt();
                 var columnIndex = columnBits.BytesToInt();
 
-                //TODO: repolace 0
                 var sval = Consts.Consts.STable[i][columnIndex][rowIndex];
                 output += sval.ConvertToBinary(4);
             }
