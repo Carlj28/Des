@@ -23,14 +23,14 @@ namespace Des.Implementation
             //TODO: LINQ string builder
             foreach (var blockOfData in blocksOfData)
             {
-                var blocks = EncodeBlock(blockOfData.StringToBinary(), keys);
+                var blocks = EncodeBlock(blockOfData.HexToBinary(), keys);
 
                 var reversedBlock = ReverseLastBlock(blocks.Last());
 
-                output += Convert.ToInt64(reversedBlock, 2).ToString("X");
+                output += reversedBlock.BinaryStringToHexString();
             }
 
-            return output.HexToString();
+            return output;
         }
 
         //private string ReverseValue(string value) => PermutationHelper.ReversePermuteKey(value, Consts.Consts.reverseIP, 64);

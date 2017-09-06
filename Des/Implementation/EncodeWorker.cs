@@ -23,7 +23,7 @@ namespace Des.Implementation
             //TODO: LINQ string builder
             foreach (var blockOfData in blocksOfData)
             {
-                var blocks = EncodeBlock(blockOfData.StringToBinary(), keys);
+                var blocks = EncodeBlock(blockOfData.HexToBinary(), keys);
 
                 var reversedBlock = ReverseLastBlock(blocks.Last());
 

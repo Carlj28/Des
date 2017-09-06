@@ -26,11 +26,11 @@ namespace Des.Tests.EncodeWorkerTests
         {
             // Act
             var result = encodeWorker.EncodeValue(value, "133457799BBCDFF1");
-            //var decoded = decodeWorker.DecodeValue(result, "133457799BBCDFF1");
+            var decoded = decodeWorker.DecodeValue(result, "133457799BBCDFF1");
 
             //Assert
             Assert.True(result == "85E813540F0AB405");
-            //Assert.True(value == decoded);
+            Assert.True(value == decoded);
         }
     }
 }
