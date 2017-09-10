@@ -15,7 +15,6 @@ namespace Des.Consts
 
         static Consts()
         {
-            //TODO: move to outside file(?)
             PC1 = new[]
             {
                 57, 49, 41, 33, 25, 17, 9,

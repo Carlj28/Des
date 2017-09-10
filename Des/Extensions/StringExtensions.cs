@@ -34,21 +34,21 @@ namespace Des.Extensions
 
         public static string BinaryStringToHexString(this string binary)
         {
-            var result = new StringBuilder(binary.Length / 8 + 1);
+            var result = new StringBuilder(binary.Length / 4 + 1);
 
             // TODO: check all 1's or 0's... Will throw otherwise
 
-            int mod4Len = binary.Length % 8;
+            int mod4Len = binary.Length % 4;
             if (mod4Len != 0)
             {
                 // pad to length multiple of 8
-                binary = binary.PadLeft(((binary.Length / 8) + 1) * 8, '0');
+                binary = binary.PadLeft(((binary.Length / 4) + 1) * 4, '0');
             }
 
-            for (int i = 0; i < binary.Length; i += 8)
+            for (var i = 0; i < binary.Length; i += 4)
             {
-                string eightBits = binary.Substring(i, 8);
-                result.AppendFormat("{0:X2}", Convert.ToByte(eightBits, 2));
+                var fourBits = binary.Substring(i, 4);
+                result.AppendFormat("{0:X}", Convert.ToByte(fourBits, 2));
             }
 
             return result.ToString();

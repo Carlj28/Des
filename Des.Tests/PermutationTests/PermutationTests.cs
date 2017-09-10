@@ -33,11 +33,9 @@ namespace Des.Tests.PermutationTests
 
             // Act
             var permuted = PermutationHelper.PermuteKey(r, Consts.Consts.EBitSelection, 48);
-            var reversed = PermutationHelper.ReversePermuteKey(permuted, Consts.Consts.EBitSelection, 32);
 
             // Assert
             Assert.Equal(expectedPermutationResult, permuted);
-            Assert.Equal(r, reversed);
         }
     }
 }

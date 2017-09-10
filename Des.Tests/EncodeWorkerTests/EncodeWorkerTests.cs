@@ -22,14 +22,17 @@ namespace Des.Tests.EncodeWorkerTests
 
         [Theory]
         [InlineData("0123456789ABCDEF")]
+        [InlineData("0123456789ABCDEF01")]
         public void EncodeTest(string value)
         {
+            // Arrange
+            var hexKey = "133457799BBCDFF1";
+
             // Act
-            var result = encodeWorker.EncodeValue(value, "133457799BBCDFF1");
-            var decoded = decodeWorker.DecodeValue(result, "133457799BBCDFF1");
+            var result = encodeWorker.EncodeValue(value, hexKey);
+            var decoded = decodeWorker.DecodeValue(result, hexKey);
 
             //Assert
-            Assert.True(result == "85E813540F0AB405");
             Assert.True(value == decoded);
         }
     }

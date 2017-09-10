@@ -7,9 +7,9 @@ using Des.Validators;
 
 namespace Des.Implementation
 {
-    public class SubkeysWorker
+    internal static class SubkeysWorker
     {
-        public IEnumerable<Subkey> GenerateSubkeys(string hexKey)
+        public static IEnumerable<Subkey> GenerateSubkeys(string hexKey)
         {
             Ensure.ValidateDesKey(hexKey);
 
@@ -25,7 +25,7 @@ namespace Des.Implementation
             return blocks;
         }
 
-        private IEnumerable<Subkey> PrepareBlocks(string c, string d)
+        private static IEnumerable<Subkey> PrepareBlocks(string c, string d)
         {
             var output = new List<Subkey> { new Subkey(c, d, string.Empty) };
 
