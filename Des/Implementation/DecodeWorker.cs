@@ -41,7 +41,7 @@ namespace Des.Implementation
             var last = dataAsList.Last();
             var lastBlock = DesCore.RemoveAppendedFakeBits(last.Value);
 
-            if (lastBlock.Length >= 16) return string.Join("", dataAsList.OrderBy(x => x.Index).Select(x => x.Value));
+            if (lastBlock.Length == 16) return string.Join("", dataAsList.Select(x => x.Value)).HexToString();
 
             dataAsList.Remove(last);
             dataAsList.Add(new ValuePart(lastBlock, last.Index));

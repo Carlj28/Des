@@ -88,7 +88,6 @@ namespace Des.Implementation
 
         public static IEnumerable<ValuePart> DivideValue(string valueInBits)
         {
-            //TODO: to linq
             var blocksOfData = new List<ValuePart>();
 
             if (valueInBits.Length == 16)
