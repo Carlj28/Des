@@ -8,11 +8,8 @@ namespace Des.Implementation
 {
     internal static class DesCore
     {
-        private static readonly StringBuilder sb;
-
         static DesCore()
-        {
-            sb = new StringBuilder();
+        {            
         }
 
         /// <summary>
@@ -22,7 +19,7 @@ namespace Des.Implementation
         /// <returns>Reversed value</returns>
         public static string ReverseLastBlock(Block block)
         {
-            sb.Clear();
+            var sb = new StringBuilder();
             sb.Append(block.R);
             sb.Append(block.L);
 

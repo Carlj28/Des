@@ -3,16 +3,16 @@ using Des.Extensions;
 
 namespace Des.Implementation
 {
-    public class KeyGenerator
+    public static class KeyGenerator
     {
-        public string GetDESHexKey()
+        public static string GetDESHexKey()
         {
             var bytes = GenerateRandomNumber(8);
 
             return bytes.ByteArrayToString();
         }
 
-        private byte[] GenerateRandomNumber(int length)
+        private static byte[] GenerateRandomNumber(int length)
         {
             using (var randomNumberGenerator = RandomNumberGenerator.Create())
             {

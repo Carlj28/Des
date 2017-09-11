@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Des.Extensions;
-using Des.Implementation;
 
 namespace Des.Console
 {
@@ -14,8 +8,6 @@ namespace Des.Console
     {
         static void Main(string[] args)
         {
-            var encodeWorker = new EncodeWorker();
-            var decodeWorker = new DecodeWorker();
             var hexKey = "133457799BBCDFF1";
             var d = new DirectoryInfo(@"Files/");//Assuming Test is your Folder
             var Files = d.GetFiles("*");
@@ -30,7 +22,6 @@ namespace Des.Console
 
                 var bytes = File.ReadAllBytes(file.DirectoryName + "\\" + file.Name);
                 var filex = Convert.ToBase64String(bytes);
-                var hexFile = filex.StringToHex();
 
                 s.Stop();
                 System.Console.WriteLine($"File opened in {s.Elapsed} ms.");
@@ -38,18 +29,18 @@ namespace Des.Console
                 s.Reset();
                 s.Start();
 
-                var result = encodeWorker.EncodeValue(hexFile, hexKey);
+                var result = Des.Encode(filex, hexKey);
 
                 s.Stop();
                 System.Console.WriteLine($"File encoded in {s.Elapsed} ms.");
                 s.Reset();
                 s.Start();
 
-                var decoded = decodeWorker.DecodeValue(result, hexKey);
+                var decoded = Des.Decode(result, hexKey);
 
                 s.Stop();
 
-                if ((bool)(hexFile != decoded))
+                if ((bool)(filex != decoded))
                     throw new Exception("Failed!");
 
                 System.Console.WriteLine($"File decoded in: {s.Elapsed} ms. memory usage: {GC.GetTotalMemory(true)}");

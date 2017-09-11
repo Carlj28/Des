@@ -14,16 +14,12 @@ namespace Des.Tests.EncodeWorkerTests
 {
     public class EncodeWorkerTests
     {
-        private readonly EncodeWorker encodeWorker;
-        private readonly DecodeWorker decodeWorker;
         private string hexKey = "133457799BBCDFF1";
         private readonly ITestOutputHelper testOutput;
 
         public EncodeWorkerTests(ITestOutputHelper testOutput)
         {
             // Arrange
-            encodeWorker = new EncodeWorker();
-            decodeWorker = new DecodeWorker();
             this.testOutput = testOutput;
         }
 
@@ -33,8 +29,8 @@ namespace Des.Tests.EncodeWorkerTests
         public void EncodeTest(string value)
         {
             // Act
-            var result = encodeWorker.EncodeValue(value, hexKey);
-            var decoded = decodeWorker.DecodeValue(result, hexKey);
+            var result = Des.Encode(value, hexKey);
+            var decoded = Des.Decode(result, hexKey);
 
             // Assert
             Assert.True(value == decoded);
@@ -57,8 +53,8 @@ namespace Des.Tests.EncodeWorkerTests
                 var hexFile = filex.StringToHex();
 
                 // Act
-                var result = encodeWorker.EncodeValue(hexFile, hexKey);
-                var decoded = decodeWorker.DecodeValue(result, hexKey);
+                var result = Des.Encode(hexFile, hexKey);
+                var decoded = Des.Decode(result, hexKey);
 
                 // Assert
                 Assert.True((bool)(hexFile == decoded));

@@ -1,64 +1,52 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Des.Extensions;
 using Des.Models;
 
 namespace Des.Implementation
 {
-    public class DecodeWorker
+    internal static class DecodeWorker
     {
-        public string DecodeValue(string data, string hexKey)
+        public static string DecodeValue(string data, string hexKey)
         {
-            //var sb = new StringBuilder();
-
             var keys = SubkeysWorker.GenerateSubkeys(hexKey);
 
-            Object lockMe = new Object();
             var blocksOfData = DesCore.DivideValue(data);
-            var processedData = new List<ValuePart>();
-            var exceptions = new ConcurrentQueue<Exception>();
+            var processedData = new ConcurrentQueue<ValuePart>();
+            var processExceptions = new ConcurrentQueue<Exception>();
 
             Parallel.ForEach(blocksOfData, (blockOfData) =>
             {
                 try
                 {
-                    var blocks = DesCore.PrepareBlocks(blockOfData.Value.HexToBinary(), keys, true);
+                    var blocks = DesCore.PrepareBlocks(blockOfData.Value.HexToBinary(), keys, false);
 
                     var reversedBlock = DesCore.ReverseLastBlock(blocks.Last());
 
-                    lock (lockMe)
-                    {
-                        processedData.Add(new ValuePart(reversedBlock.BinaryStringToHexString(), blockOfData.Index));
-                    }
+                    processedData.Enqueue(new ValuePart(reversedBlock.BinaryStringToHexString(), blockOfData.Index));
                 }
                 catch (Exception e)
                 {
-                    exceptions.Enqueue(e);
+                    processExceptions.Enqueue(e);
                 }
             });
 
-            //foreach (var blockOfData in blocksOfData)
-            //{
-            //    var blocks = DesCore.PrepareBlocks(blockOfData.HexToBinary(), keys, false);
+            //TODO: send details about ex
+            if (processExceptions.Any())
+                throw new Exception("One or more exceptions occurred!");
 
-            //    var reversedBlock = DesCore.ReverseLastBlock(blocks.Last());
-
-            //    sb.Append(reversedBlock.BinaryStringToHexString());
-            //}
-
-            var last = processedData.OrderBy(x => x.Index).Last();
+            var dataAsList = processedData.OrderBy(x => x.Index).ToList();
+            var last = dataAsList.Last();
             var lastBlock = DesCore.RemoveAppendedFakeBits(last.Value);
 
-            if (lastBlock.Length >= 16) return string.Join("", processedData.OrderBy(x => x.Index).Select(x => x.Value));
+            if (lastBlock.Length >= 16) return string.Join("", dataAsList.OrderBy(x => x.Index).Select(x => x.Value));
 
-            processedData.Remove(last);
-            processedData.Add(new ValuePart(lastBlock, last.Index));
+            dataAsList.Remove(last);
+            dataAsList.Add(new ValuePart(lastBlock, last.Index));
 
-            return string.Join("", processedData.OrderBy(x => x.Index).Select(x => x.Value));
+            return string.Join("", dataAsList.Select(x => x.Value)).HexToString();
         }
     }
 }

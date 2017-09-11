@@ -36,12 +36,9 @@ namespace Des.Extensions
         {
             var result = new StringBuilder(binary.Length / 4 + 1);
 
-            // TODO: check all 1's or 0's... Will throw otherwise
-
-            int mod4Len = binary.Length % 4;
+            var mod4Len = binary.Length % 4;
             if (mod4Len != 0)
             {
-                // pad to length multiple of 8
                 binary = binary.PadLeft(((binary.Length / 4) + 1) * 4, '0');
             }
 
