@@ -56,8 +56,8 @@ namespace Des.Extensions
 
         public static string StringToHex(this string value)
         {
-            var charValues = value.ToCharArray();
-            return charValues.Select(Convert.ToInt32).Aggregate("", (current, val) => current + String.Format("{0:X}", val));
+            var bytes = Encoding.Default.GetBytes(value);
+            return BitConverter.ToString(bytes).Replace("-", "");
         }
 
         public static string HexToString(this string value)
@@ -78,7 +78,6 @@ namespace Des.Extensions
         /// <returns></returns>
         public static string XorByKey(this string value, string key)
         {
-            //TODO: shorten
             var sb = new StringBuilder();
             for (var i = 0; i < value.Length; i++)
                 sb.Append(value[i] ^ key[i % key.Length]);

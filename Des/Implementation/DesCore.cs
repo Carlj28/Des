@@ -89,32 +89,32 @@ namespace Des.Implementation
             return PermutationHelper.PermuteKey(sb.ToString(), Consts.Consts.P, 32);
         }
 
-        public static IEnumerable<string> DivideValue(string valueInBits)
+        public static IEnumerable<ValuePart> DivideValue(string valueInBits)
         {
             //TODO: to linq
-            var blocksOfData = new List<string>();
+            var blocksOfData = new List<ValuePart>();
 
             if (valueInBits.Length == 16)
             {
-                blocksOfData.Add(valueInBits);
+                blocksOfData.Add(new ValuePart(valueInBits, 0));
                 return blocksOfData;
             }
             if (valueInBits.Length < 16)
-                blocksOfData.Add(valueInBits);
+                blocksOfData.Add(new ValuePart(valueInBits, 0));
 
             //Divide in block of 64 bits
             for (var i = 0; i < (double)valueInBits.Length / (double)16; i++)
             {
-                blocksOfData.Add(valueInBits.Length >= 15 * i + 16
+                blocksOfData.Add(new ValuePart(valueInBits.Length >= 16 * i + 16
                     ? valueInBits.Substring(16 * i, 16)
-                    : valueInBits.Substring(16 * i, valueInBits.Length - 15 * i - 1));
+                    : valueInBits.Substring(16 * i, valueInBits.Length - 16 * i), i));
             }
 
-            if (blocksOfData.Last().Length == 16) return blocksOfData;
+            if (blocksOfData.Last().Value.Length == 16) return blocksOfData;
 
             var lastBlock = blocksOfData.Last();
             blocksOfData.RemoveAt(blocksOfData.Count - 1);
-            blocksOfData.Add(DESMessageAppender.AppendBits(lastBlock));
+            blocksOfData.Add(new ValuePart(DESMessageAppender.AppendBits(lastBlock.Value), lastBlock.Index));
 
             return blocksOfData;
         }

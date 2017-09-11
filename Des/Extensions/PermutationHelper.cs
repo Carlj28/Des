@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Des.Extensions
 {
@@ -17,10 +20,15 @@ namespace Des.Extensions
             var builder = new StringBuilder(keyLength);
             builder.Append('0', keyLength);
 
-            for (var i = 0; i < PC.Count; i++)
-            {
-                builder[i] = value[PC[i] - 1];
-            }
+            //for (var i = 0; i < PC.Count; i++)
+            //{
+            //    builder[i] = value[PC[i] - 1];
+            //}
+
+            Parallel.For(0, PC.Count,
+             index => {
+                 builder[index] = value[PC[index] - 1];
+             });
 
             return builder.ToString();
         }

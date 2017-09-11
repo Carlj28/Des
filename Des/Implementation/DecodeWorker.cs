@@ -1,6 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Des.Extensions;
+using Des.Models;
 
 namespace Des.Implementation
 {
@@ -8,29 +13,52 @@ namespace Des.Implementation
     {
         public string DecodeValue(string data, string hexKey)
         {
-            var sb = new StringBuilder();
+            //var sb = new StringBuilder();
 
             var keys = SubkeysWorker.GenerateSubkeys(hexKey);
 
+            Object lockMe = new Object();
             var blocksOfData = DesCore.DivideValue(data);
+            var processedData = new List<ValuePart>();
+            var exceptions = new ConcurrentQueue<Exception>();
 
-            foreach (var blockOfData in blocksOfData)
+            Parallel.ForEach(blocksOfData, (blockOfData) =>
             {
-                var blocks = DesCore.PrepareBlocks(blockOfData.HexToBinary(), keys, false);
+                try
+                {
+                    var blocks = DesCore.PrepareBlocks(blockOfData.Value.HexToBinary(), keys, true);
 
-                var reversedBlock = DesCore.ReverseLastBlock(blocks.Last());
+                    var reversedBlock = DesCore.ReverseLastBlock(blocks.Last());
 
-                sb.Append(reversedBlock.BinaryStringToHexString());
-            }
+                    lock (lockMe)
+                    {
+                        processedData.Add(new ValuePart(reversedBlock.BinaryStringToHexString(), blockOfData.Index));
+                    }
+                }
+                catch (Exception e)
+                {
+                    exceptions.Enqueue(e);
+                }
+            });
 
-            var lastBlock = DesCore.RemoveAppendedFakeBits(sb.ToString(sb.Length - 16, 16));
+            //foreach (var blockOfData in blocksOfData)
+            //{
+            //    var blocks = DesCore.PrepareBlocks(blockOfData.HexToBinary(), keys, false);
 
-            if (lastBlock.Length >= 16) return sb.ToString();
+            //    var reversedBlock = DesCore.ReverseLastBlock(blocks.Last());
 
-            sb.Remove(sb.Length - 16, 16);
-            sb.Append(lastBlock);
+            //    sb.Append(reversedBlock.BinaryStringToHexString());
+            //}
 
-            return sb.ToString();
+            var last = processedData.OrderBy(x => x.Index).Last();
+            var lastBlock = DesCore.RemoveAppendedFakeBits(last.Value);
+
+            if (lastBlock.Length >= 16) return string.Join("", processedData.OrderBy(x => x.Index).Select(x => x.Value));
+
+            processedData.Remove(last);
+            processedData.Add(new ValuePart(lastBlock, last.Index));
+
+            return string.Join("", processedData.OrderBy(x => x.Index).Select(x => x.Value));
         }
     }
 }

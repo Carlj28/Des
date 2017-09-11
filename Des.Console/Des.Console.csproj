@@ -47,12 +47,131 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Files\FAKTURA-F_10312809_06_17-KONTO_17017516 %281%29 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\FAKTURA-F_10312809_06_17-KONTO_17017516 %281%29.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\FAKTURA-F_10312809_06_17-KONTO_17017516 %282%29 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\FAKTURA-F_10312809_06_17-KONTO_17017516 %282%29.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\FAKTURA-F_10312809_06_17-KONTO_17017516 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\FAKTURA-F_10312809_06_17-KONTO_17017516.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\FAKTURA-F_10611139_07_17-KONTO_17017516 %281%29 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\FAKTURA-F_10611139_07_17-KONTO_17017516 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\FAKTURA-F_40300981_06_17-KONTO_39516617 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski %281%29 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski 03.17 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski 04.17 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski 05.17 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski 05.17.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski 06.17 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski 07.17 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski 07.17.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski 08.17 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski 09.17 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski 12.16 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\faktura_vat_Bartosz_Ziółkowski — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ford-mustang-cennik — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\FV-Paliwo05 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Important Document.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\IntroToRx_3_.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\mb_manual_ga-h110m-s2h%28gsm%29%28ddr3%29_e %281%29 — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\mb_manual_ga-h110m-s2h%28gsm%29%28ddr3%29_e %281%29.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\mb_manual_ga-h110m-s2h%28gsm%29%28ddr3%29_e — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\mb_manual_ga-h110m-s2h%28gsm%29%28ddr3%29_e.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\mb_manual_ga-h110m-s2h%28gsm%29%28ddr3%29_sc — kopia.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\mb_manual_ga-h110m-s2h%28gsm%29%28ddr3%29_sc.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\mb_utility_appcenter_100series.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\MultiSelectComboBox_Demo_MVVM_.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Des\Des.csproj">
       <Project>{21c03b47-b5f1-43f1-9d6e-049b782319ec}</Project>
       <Name>Des</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Files\15015085.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\horsehead-nebula-dark-nebula-constellation-orion-87646.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\OperaSetup.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\SpotifySetup %281%29.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\SpotifySetup.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\TestFile1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
