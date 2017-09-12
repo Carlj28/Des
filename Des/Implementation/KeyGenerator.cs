@@ -5,6 +5,10 @@ namespace Des.Implementation
 {
     public static class KeyGenerator
     {
+        /// <summary>
+        /// Generates random DES key
+        /// </summary>
+        /// <returns></returns>
         public static string GetDESHexKey()
         {
             var bytes = GenerateRandomNumber(8);

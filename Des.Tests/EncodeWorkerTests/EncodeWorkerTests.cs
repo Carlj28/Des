@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Des.Implementation;
 using Des.Extensions;
 using Xunit;
 using Xunit.Abstractions;
@@ -39,40 +34,17 @@ namespace Des.Tests.EncodeWorkerTests
         [Fact]
         public void OpenFileEncodeAndDecode()
         {
-            DirectoryInfo d = new DirectoryInfo(@"Files/");//Assuming Test is your Folder
-            FileInfo[] Files = d.GetFiles("*");
-            string str = "";
-            Stopwatch s = new Stopwatch();
-            foreach (FileInfo file in Files)
-            {
-                s.Reset();
-                s.Start();
-                // Arrange
-                var bytes = File.ReadAllBytes(file.DirectoryName + "\\" + file.Name);
-                var filex = Convert.ToBase64String(bytes);
-                var hexFile = filex.StringToHex();
+            // Arrange
+            var bytes = File.ReadAllBytes("Files/TestFile1.txt");
+            var file = Convert.ToBase64String(bytes);
+            var hexFile = file.StringToHex();
 
-                // Act
-                var result = Des.Encode(hexFile, hexKey);
-                var decoded = Des.Decode(result, hexKey);
+            // Act
+            var result = encodeWorker.EncodeValue(hexFile, hexKey);
+            var decoded = decodeWorker.DecodeValue(result, hexKey);
 
-                // Assert
-                Assert.True((bool)(hexFile == decoded));
-                s.Stop();
-                testOutput.WriteLine($"Processed file {file.Name} {file.Length / 1000000} mb. in {s.Elapsed.Seconds} s. memory usage: {GC.GetTotalMemory(true)}");
-            }
-
-            //// Arrange
-            //var bytes = File.ReadAllBytes("Files/TestFile1.txt");
-            //var file = Convert.ToBase64String(bytes);
-            //var hexFile = file.StringToHex();
-
-            //// Act
-            //var result = encodeWorker.EncodeValue(hexFile, hexKey);
-            //var decoded = decodeWorker.DecodeValue(result, hexKey);
-
-            //// Assert
-            //Assert.True((bool) (hexFile == decoded));
+            // Assert
+            Assert.True((bool)(hexFile == decoded));
         }
     }
 }

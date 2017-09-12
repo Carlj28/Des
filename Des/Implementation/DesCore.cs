@@ -26,48 +26,54 @@ namespace Des.Implementation
             return PermutationHelper.PermuteKey(sb.ToString(), Consts.Consts.reverseIP, 64);
         }
 
+        /// <summary>
+        /// Prepare blocks of data
+        /// </summary>
+        /// <param name="blockOfData">Whole data</param>
+        /// <param name="keys">Subkeys</param>
+        /// <param name="encode">Encode/Decode</param>
+        /// <returns>Encoded/Decoded data</returns>
         public static IEnumerable<Block> PrepareBlocks(string blockOfData, IEnumerable<Subkey> keys, bool encode)
         {
             var permutedBlockOfData = PermutationHelper.PermuteKey(blockOfData, Consts.Consts.IP, 64);
 
-            var l = permutedBlockOfData.Substring(0, 32);
-            var r = permutedBlockOfData.Substring(32, 32);
-
-            var data = new List<Block> { new Block(l, r) };
+            var data = new List<Block> { new Block(permutedBlockOfData.Substring(0, 32), permutedBlockOfData.Substring(32, 32)) };
 
             if(encode)
                 for (var i = 0; i < 16; i++)
                 {
-                    var ln = data[i].R;
-                    var rl = data[i].L.XorByKey(F(keys.ElementAt(i).Key, data[i].R));
-
-                    data.Add(new Block(ln, rl));
+                    data.Add(new Block(data[i].R, data[i].L.XorByKey(F(keys.ElementAt(i).Key, data[i].R))));
                 }
             else
                 for (var i = 0; i < 16; i++)
                 {
-                    var ln = data[i].R;
-                    var rl = data[i].L.XorByKey(F(keys.ElementAt(15 - i).Key, data[i].R));
-
-                    data.Add(new Block(ln, rl));
+                    data.Add(new Block(data[i].R, data[i].L.XorByKey(F(keys.ElementAt(15 - i).Key, data[i].R))));
                 }
 
             return data;
         }
 
+        /// <summary>
+        /// F function
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <param name="r">R</param>
+        /// <returns></returns>
         public static string F(string key, string r)
         {
             var er = PermutationHelper.PermuteKey(r, Consts.Consts.EBitSelection, 48);
             var xor = er.XorByKey(key);
-            var sbox = PrepareSBoxes(xor);
 
-            return sbox;
+            return PrepareSBoxes(xor);
         }
 
+        /// <summary>
+        /// Prepare s boxes
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string PrepareSBoxes(string value)
         {
-            //TODO ensure value has 48 bits
-
             var sb = new StringBuilder();
 
             for (var i = 0; i < 8; i++)
@@ -86,6 +92,11 @@ namespace Des.Implementation
             return PermutationHelper.PermuteKey(sb.ToString(), Consts.Consts.P, 32);
         }
 
+        /// <summary>
+        /// Divide value
+        /// </summary>
+        /// <param name="valueInBits">Value in bits</param>
+        /// <returns></returns>
         public static IEnumerable<ValuePart> DivideValue(string valueInBits)
         {
             var blocksOfData = new List<ValuePart>();
@@ -115,6 +126,11 @@ namespace Des.Implementation
             return blocksOfData;
         }
 
+        /// <summary>
+        /// Remove fake bits
+        /// </summary>
+        /// <param name="blockOfData"></param>
+        /// <returns></returns>
         public static string RemoveAppendedFakeBits(string blockOfData)
         {
             var bitsCounter = blockOfData.Last().HexToInt();

@@ -9,6 +9,11 @@ namespace Des.Implementation
 {
     internal static class SubkeysWorker
     {
+        /// <summary>
+        /// Generates subkeys for key
+        /// </summary>
+        /// <param name="hexKey">DES key</param>
+        /// <returns>Subkeys</returns>
         public static IEnumerable<Subkey> GenerateSubkeys(string hexKey)
         {
             Ensure.ValidateDesKey(hexKey);

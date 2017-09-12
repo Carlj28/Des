@@ -9,6 +9,12 @@ namespace Des.Implementation
 {
     internal static class DecodeWorker
     {
+        /// <summary>
+        /// Decodes data for key
+        /// </summary>
+        /// <param name="data">Data to decode</param>
+        /// <param name="hexKey">DES key</param>
+        /// <returns>Decoded data</returns>
         public static string DecodeValue(string data, string hexKey)
         {
             var keys = SubkeysWorker.GenerateSubkeys(hexKey);
@@ -33,7 +39,6 @@ namespace Des.Implementation
                 }
             });
 
-            //TODO: send details about ex
             if (processExceptions.Any())
                 throw new Exception("One or more exceptions occurred!");
 

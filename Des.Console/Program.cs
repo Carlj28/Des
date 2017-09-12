@@ -10,7 +10,7 @@ namespace Des.Console
         {
             var hexKey = "133457799BBCDFF1";
             var d = new DirectoryInfo(@"Files/");//Assuming Test is your Folder
-            var Files = d.GetFiles("architecting-and-developing-containerized-and-microservice-based-net-applications-ebook-early-draft.pdf");
+            var Files = d.GetFiles("*");
             var str = "";
             var s = new Stopwatch();
             foreach (FileInfo file in Files)
