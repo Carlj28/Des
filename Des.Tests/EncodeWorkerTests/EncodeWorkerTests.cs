@@ -1,26 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Des.Implementation;
 using Des.Extensions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Des.Tests.EncodeWorkerTests
 {
     public class EncodeWorkerTests
     {
-        private readonly EncodeWorker encodeWorker;
-        private readonly DecodeWorker decodeWorker;
         private string hexKey = "133457799BBCDFF1";
+        private readonly ITestOutputHelper testOutput;
 
-        public EncodeWorkerTests()
+        public EncodeWorkerTests(ITestOutputHelper testOutput)
         {
             // Arrange
-            encodeWorker = new EncodeWorker();
-            decodeWorker = new DecodeWorker();
+            this.testOutput = testOutput;
         }
 
         [Theory]
@@ -29,8 +24,8 @@ namespace Des.Tests.EncodeWorkerTests
         public void EncodeTest(string value)
         {
             // Act
-            var result = encodeWorker.EncodeValue(value, hexKey);
-            var decoded = decodeWorker.DecodeValue(result, hexKey);
+            var result = Des.Encode(value, hexKey);
+            var decoded = Des.Decode(result, hexKey);
 
             // Assert
             Assert.True(value == decoded);
@@ -49,7 +44,7 @@ namespace Des.Tests.EncodeWorkerTests
             var decoded = decodeWorker.DecodeValue(result, hexKey);
 
             // Assert
-            Assert.True((bool) (hexFile == decoded));
+            Assert.True((bool)(hexFile == decoded));
         }
     }
 }

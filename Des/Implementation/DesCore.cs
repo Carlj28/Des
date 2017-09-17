@@ -8,11 +8,8 @@ namespace Des.Implementation
 {
     internal static class DesCore
     {
-        private static readonly StringBuilder sb;
-
         static DesCore()
-        {
-            sb = new StringBuilder();
+        {            
         }
 
         /// <summary>
@@ -22,55 +19,61 @@ namespace Des.Implementation
         /// <returns>Reversed value</returns>
         public static string ReverseLastBlock(Block block)
         {
-            sb.Clear();
+            var sb = new StringBuilder();
             sb.Append(block.R);
             sb.Append(block.L);
 
             return PermutationHelper.PermuteKey(sb.ToString(), Consts.Consts.reverseIP, 64);
         }
 
+        /// <summary>
+        /// Prepare blocks of data
+        /// </summary>
+        /// <param name="blockOfData">Whole data</param>
+        /// <param name="keys">Subkeys</param>
+        /// <param name="encode">Encode/Decode</param>
+        /// <returns>Encoded/Decoded data</returns>
         public static IEnumerable<Block> PrepareBlocks(string blockOfData, IEnumerable<Subkey> keys, bool encode)
         {
             var permutedBlockOfData = PermutationHelper.PermuteKey(blockOfData, Consts.Consts.IP, 64);
 
-            var l = permutedBlockOfData.Substring(0, 32);
-            var r = permutedBlockOfData.Substring(32, 32);
-
-            var data = new List<Block> { new Block(l, r) };
+            var data = new List<Block> { new Block(permutedBlockOfData.Substring(0, 32), permutedBlockOfData.Substring(32, 32)) };
 
             if(encode)
                 for (var i = 0; i < 16; i++)
                 {
-                    var ln = data[i].R;
-                    var rl = data[i].L.XorByKey(F(keys.ElementAt(i).Key, data[i].R));
-
-                    data.Add(new Block(ln, rl));
+                    data.Add(new Block(data[i].R, data[i].L.XorByKey(F(keys.ElementAt(i).Key, data[i].R))));
                 }
             else
                 for (var i = 0; i < 16; i++)
                 {
-                    var ln = data[i].R;
-                    var rl = data[i].L.XorByKey(F(keys.ElementAt(15 - i).Key, data[i].R));
-
-                    data.Add(new Block(ln, rl));
+                    data.Add(new Block(data[i].R, data[i].L.XorByKey(F(keys.ElementAt(15 - i).Key, data[i].R))));
                 }
 
             return data;
         }
 
+        /// <summary>
+        /// F function
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <param name="r">R</param>
+        /// <returns></returns>
         public static string F(string key, string r)
         {
             var er = PermutationHelper.PermuteKey(r, Consts.Consts.EBitSelection, 48);
             var xor = er.XorByKey(key);
-            var sbox = PrepareSBoxes(xor);
 
-            return sbox;
+            return PrepareSBoxes(xor);
         }
 
+        /// <summary>
+        /// Prepare s boxes
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string PrepareSBoxes(string value)
         {
-            //TODO ensure value has 48 bits
-
             var sb = new StringBuilder();
 
             for (var i = 0; i < 8; i++)
@@ -89,36 +92,45 @@ namespace Des.Implementation
             return PermutationHelper.PermuteKey(sb.ToString(), Consts.Consts.P, 32);
         }
 
-        public static IEnumerable<string> DivideValue(string valueInBits)
+        /// <summary>
+        /// Divide value
+        /// </summary>
+        /// <param name="valueInBits">Value in bits</param>
+        /// <returns></returns>
+        public static IEnumerable<ValuePart> DivideValue(string valueInBits)
         {
-            //TODO: to linq
-            var blocksOfData = new List<string>();
+            var blocksOfData = new List<ValuePart>();
 
             if (valueInBits.Length == 16)
             {
-                blocksOfData.Add(valueInBits);
+                blocksOfData.Add(new ValuePart(valueInBits, 0));
                 return blocksOfData;
             }
             if (valueInBits.Length < 16)
-                blocksOfData.Add(valueInBits);
+                blocksOfData.Add(new ValuePart(valueInBits, 0));
 
             //Divide in block of 64 bits
             for (var i = 0; i < (double)valueInBits.Length / (double)16; i++)
             {
-                blocksOfData.Add(valueInBits.Length >= 15 * i + 16
+                blocksOfData.Add(new ValuePart(valueInBits.Length >= 16 * i + 16
                     ? valueInBits.Substring(16 * i, 16)
-                    : valueInBits.Substring(16 * i, valueInBits.Length - 15 * i - 1));
+                    : valueInBits.Substring(16 * i, valueInBits.Length - 16 * i), i));
             }
 
-            if (blocksOfData.Last().Length == 16) return blocksOfData;
+            if (blocksOfData.Last().Value.Length == 16) return blocksOfData;
 
             var lastBlock = blocksOfData.Last();
             blocksOfData.RemoveAt(blocksOfData.Count - 1);
-            blocksOfData.Add(DESMessageAppender.AppendBits(lastBlock));
+            blocksOfData.Add(new ValuePart(DESMessageAppender.AppendBits(lastBlock.Value), lastBlock.Index));
 
             return blocksOfData;
         }
 
+        /// <summary>
+        /// Remove fake bits
+        /// </summary>
+        /// <param name="blockOfData"></param>
+        /// <returns></returns>
         public static string RemoveAppendedFakeBits(string blockOfData)
         {
             var bitsCounter = blockOfData.Last().HexToInt();

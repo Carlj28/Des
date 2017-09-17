@@ -1,11 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Des.Extensions
+﻿namespace Des.Extensions
 {
+    /// <summary>
+    /// Extensions for char and char array
+    /// </summary>
     public static class CharExtensions
     {
+        /// <summary>
+        /// Converts hex char to int
+        /// </summary>
+        /// <param name="hexChar">Hex char.</param>
+        /// <returns>Hex char int value.</returns>
         public static int HexToInt(this char hexChar)
         {
             hexChar = char.ToUpper(hexChar);

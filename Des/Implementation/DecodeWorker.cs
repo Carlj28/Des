@@ -1,36 +1,57 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Linq;
+using System.Threading.Tasks;
 using Des.Extensions;
+using Des.Models;
 
 namespace Des.Implementation
 {
-    public class DecodeWorker
+    internal static class DecodeWorker
     {
-        public string DecodeValue(string data, string hexKey)
+        /// <summary>
+        /// Decodes data for key
+        /// </summary>
+        /// <param name="data">Data to decode</param>
+        /// <param name="hexKey">DES key</param>
+        /// <returns>Decoded data</returns>
+        public static string DecodeValue(string data, string hexKey)
         {
-            var sb = new StringBuilder();
-
             var keys = SubkeysWorker.GenerateSubkeys(hexKey);
 
             var blocksOfData = DesCore.DivideValue(data);
+            var processedData = new ConcurrentQueue<ValuePart>();
+            var processExceptions = new ConcurrentQueue<Exception>();
 
-            foreach (var blockOfData in blocksOfData)
+            Parallel.ForEach(blocksOfData, (blockOfData) =>
             {
-                var blocks = DesCore.PrepareBlocks(blockOfData.HexToBinary(), keys, false);
+                try
+                {
+                    var blocks = DesCore.PrepareBlocks(blockOfData.Value.HexToBinary(), keys, false);
 
-                var reversedBlock = DesCore.ReverseLastBlock(blocks.Last());
+                    var reversedBlock = DesCore.ReverseLastBlock(blocks.Last());
 
-                sb.Append(reversedBlock.BinaryStringToHexString());
-            }
+                    processedData.Enqueue(new ValuePart(reversedBlock.BinaryStringToHexString(), blockOfData.Index));
+                }
+                catch (Exception e)
+                {
+                    processExceptions.Enqueue(e);
+                }
+            });
 
-            var lastBlock = DesCore.RemoveAppendedFakeBits(sb.ToString(sb.Length - 16, 16));
+            if (processExceptions.Any())
+                throw new Exception("One or more exceptions occurred!");
 
-            if (lastBlock.Length >= 16) return sb.ToString();
+            var dataAsList = processedData.OrderBy(x => x.Index).ToList();
+            var last = dataAsList.Last();
+            var lastBlock = DesCore.RemoveAppendedFakeBits(last.Value);
 
-            sb.Remove(sb.Length - 16, 16);
-            sb.Append(lastBlock);
+            if (lastBlock.Length == 16) return string.Join("", dataAsList.Select(x => x.Value)).HexToString();
 
-            return sb.ToString();
+            dataAsList.Remove(last);
+            dataAsList.Add(new ValuePart(lastBlock, last.Index));
+
+            return string.Join("", dataAsList.Select(x => x.Value)).HexToString();
         }
     }
 }

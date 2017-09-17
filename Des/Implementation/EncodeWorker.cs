@@ -1,29 +1,48 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Linq;
+using System.Threading.Tasks;
 using Des.Extensions;
+using Des.Models;
 
 namespace Des.Implementation
 {
-    public class EncodeWorker
+    internal static class EncodeWorker
     {
-        public string EncodeValue(string data, string hexKey)
+        /// <summary>
+        /// Encode data for key
+        /// </summary>
+        /// <param name="data">Data</param>
+        /// <param name="hexKey">DES key</param>
+        /// <returns>Encoded data</returns>
+        public static string EncodeValue(string data, string hexKey)
         {
-            var sb = new StringBuilder();
-
             var keys = SubkeysWorker.GenerateSubkeys(hexKey);
 
             var blocksOfData = DesCore.DivideValue(data);
+            var processedData = new ConcurrentQueue<ValuePart>();
+            var processExceptions = new ConcurrentQueue<Exception>();
 
-            foreach (var blockOfData in blocksOfData)
+            Parallel.ForEach(blocksOfData, (blockOfData) =>
             {
-                var blocks = DesCore.PrepareBlocks(blockOfData.HexToBinary(), keys, true);
+                try
+                {
+                    var blocks = DesCore.PrepareBlocks(blockOfData.Value.HexToBinary(), keys, true);
 
-                var reversedBlock = DesCore.ReverseLastBlock(blocks.Last());
+                    var reversedBlock = DesCore.ReverseLastBlock(blocks.Last());
 
-                sb.Append(reversedBlock.BinaryStringToHexString());
-            }
+                    processedData.Enqueue(new ValuePart(reversedBlock.BinaryStringToHexString(), blockOfData.Index));
+                }
+                catch (Exception e)
+                {
+                    processExceptions.Enqueue(e);
+                }
+            });
 
-            return sb.ToString();
+            if(processExceptions.Any())
+                throw new Exception("One or more exceptions occurred!");
+
+            return string.Join("", processedData.OrderBy(x => x.Index).Select(x => x.Value));
         }  
     }
 }

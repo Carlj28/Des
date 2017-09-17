@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Des.Extensions
 {
+    /// <summary>
+    /// Extensions for string and string array
+    /// </summary>
     public static class StringExtensions
     {
         /// <summary>
@@ -23,7 +25,6 @@ namespace Des.Extensions
         /// <returns></returns>
         public static string StringToBinary(this string value)
         {
-            //TODO: shorten
             var sb = new StringBuilder();
             foreach (var b in Encoding.Unicode.GetBytes(value))
             {
@@ -32,16 +33,18 @@ namespace Des.Extensions
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Converts binary string to hex string
+        /// </summary>
+        /// <param name="binary">Binary string</param>
+        /// <returns>Hex string</returns>
         public static string BinaryStringToHexString(this string binary)
         {
             var result = new StringBuilder(binary.Length / 4 + 1);
 
-            // TODO: check all 1's or 0's... Will throw otherwise
-
-            int mod4Len = binary.Length % 4;
+            var mod4Len = binary.Length % 4;
             if (mod4Len != 0)
             {
-                // pad to length multiple of 8
                 binary = binary.PadLeft(((binary.Length / 4) + 1) * 4, '0');
             }
 
@@ -54,12 +57,22 @@ namespace Des.Extensions
             return result.ToString();
         }
 
+        /// <summary>
+        /// Converts string to hex
+        /// </summary>
+        /// <param name="value">Value</param>
+        /// <returns>Hex string</returns>
         public static string StringToHex(this string value)
         {
-            var charValues = value.ToCharArray();
-            return charValues.Select(Convert.ToInt32).Aggregate("", (current, val) => current + String.Format("{0:X}", val));
+            var bytes = Encoding.Default.GetBytes(value);
+            return BitConverter.ToString(bytes).Replace("-", "");
         }
 
+        /// <summary>
+        /// Converts hex string to string
+        /// </summary>
+        /// <param name="value">Value</param>
+        /// <returns>Hex string</returns>
         public static string HexToString(this string value)
         {
             var raw = new byte[value.Length / 2];
@@ -78,7 +91,6 @@ namespace Des.Extensions
         /// <returns></returns>
         public static string XorByKey(this string value, string key)
         {
-            //TODO: shorten
             var sb = new StringBuilder();
             for (var i = 0; i < value.Length; i++)
                 sb.Append(value[i] ^ key[i % key.Length]);
@@ -86,6 +98,11 @@ namespace Des.Extensions
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Converts bytes string to integer value
+        /// </summary>
+        /// <param name="value">Bytes string</param>
+        /// <returns>Integer value</returns>
         public static int BytesToInt(this string value) => Convert.ToInt32(value, 2);
     }
 }

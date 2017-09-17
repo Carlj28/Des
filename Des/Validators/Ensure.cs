@@ -36,7 +36,7 @@ namespace Des.Validators
         /// <param name="hexHey">Key for DES in hex</param>
         public static void ValidateDesKey(string hexHey)
         {
-            if(hexHey.HexToBinary().Length != 64)
+            if(String.IsNullOrEmpty(hexHey) || hexHey.HexToBinary().Length != 64)
                 throw new ArgumentException($"{nameof(hexHey)} is the wrong length!");
         }
 
