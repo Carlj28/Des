@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 using Des.Extensions;
+using Des.Helpers;
 using Des.Models;
 
 namespace Des.Implementation
@@ -43,6 +44,6 @@ namespace Des.Implementation
                 throw new Exception("One or more exceptions occurred!");
 
             return string.Join("", processedData.OrderBy(x => x.Index).Select(x => x.Value));
-        }  
+        }
     }
 }
